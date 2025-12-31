@@ -4,29 +4,57 @@
 <meta charset="UTF-8" />
 <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
 <title>Agentealta – Automatización con IA</title>
-<meta name="description" content="Agentealta: agentes de correo inteligentes que responden, agendan y gestionan como tú.">
+<meta name="description" content="Agentes de correo inteligentes que responden, agendan y gestionan como tú. Demostración gratuita disponible.">
 <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700&family=Space+Grotesk:wght@600;700&display=swap" rel="stylesheet">
 <style>
-/* Estilos compartidos */
+/* Splash screen */
+#splashScreen {
+position: fixed;
+top: 0;
+left: 0;
+width: 100%;
+height: 100%;
+background: #0f172a;
+display: flex;
+justify-content: center;
+align-items: center;
+z-index: 9999;
+opacity: 1;
+transition: opacity 0.6s ease;
+}
+#splashScreen.hidden {
+opacity: 0;
+pointer-events: none;
+}
+#splashLogo {
+height: 180px;
+max-width: 90%;
+}
+
+/* Estilos compartidos - estilo HYPERSONIC */
 * { margin: 0; padding: 0; box-sizing: border-box; }
 :root {
 --primary: #1e40af;
 --primary-light: #3b82f6;
+--primary-bright: #4f46e5;
 --dark: #0f172a;
 --light: #f8fafc;
 --gray: #64748b;
 --light-gray: #e2e8f0;
+--accent-glow: rgba(59, 130, 246, 0.3);
 }
 body {
 font-family: 'Inter', sans-serif;
-background-color: #f9fbfe;
+background: linear-gradient(135deg, #f0f9ff 0%, #e0f2fe 100%);
 color: var(--dark);
 line-height: 1.6;
 scroll-behavior: smooth;
+overflow-x: hidden;
 }
 h1, h2, h3 {
 font-family: 'Space Grotesk', sans-serif;
-font-weight: 700;
+font-weight: 800;
+letter-spacing: -0.5px;
 }
 .container {
 width: 90%;
@@ -34,15 +62,17 @@ max-width: 1100px;
 margin: 0 auto;
 padding: 0 20px;
 }
-/* Sticky navigation - ligera y oscura */
+/* Navegación - logo más grande */
 nav {
 background: var(--dark);
-padding: 16px 0;
-box-shadow: 0 2px 8px rgba(0,0,0,0.15);
+padding: 18px 0;
+box-shadow: 0 4px 20px rgba(0,0,0,0.25);
 position: fixed;
 top: 0;
 width: 100%;
 z-index: 1000;
+backdrop-filter: blur(8px);
+-webkit-backdrop-filter: blur(8px);
 }
 .nav-content {
 display: flex;
@@ -50,7 +80,11 @@ justify-content: space-between;
 align-items: center;
 }
 .logo {
-height: 64px;
+height: 72px; /* ↑ más grande */
+transition: transform 0.4s cubic-bezier(0.34, 1.56, 0.64, 1);
+}
+.logo:hover {
+transform: scale(1.03);
 }
 .logo img {
 height: 100%;
@@ -59,25 +93,26 @@ display: block;
 }
 .nav-links {
 display: flex;
-gap: 24px;
+gap: 26px;
 }
 .nav-links a {
 text-decoration: none;
 color: white;
 font-weight: 600;
-font-size: 1rem;
-transition: color 0.2s;
+font-size: 1.02rem;
 position: relative;
+padding: 4px 0;
+transition: color 0.3s cubic-bezier(0.34, 1.56, 0.64, 1);
 }
 .nav-links a::after {
 content: '';
 position: absolute;
-bottom: -4px;
+bottom: 0;
 left: 0;
 width: 0;
 height: 2px;
 background: var(--primary-light);
-transition: width 0.3s;
+transition: width 0.4s cubic-bezier(0.34, 1.56, 0.64, 1);
 }
 .nav-links a:hover,
 .nav-links a.active {
@@ -88,31 +123,34 @@ color: var(--primary-light);
 width: 100%;
 }
 
-/* Sections */
+/* Resto de estilos (igual que antes, omitido por brevedad pero incluido abajo) */
 section {
-padding: 120px 0 100px;
+padding: 130px 0 100px;
+position: relative;
 }
 .hero {
 text-align: center;
-background: linear-gradient(135deg, #f0f9ff 0%, #e0f2fe 100%);
-padding: 140px 0 80px;
+padding: 150px 0 90px;
 }
 .hero h1 {
-font-size: 2.8rem;
-margin-bottom: 20px;
+font-size: 3.2rem;
+margin-bottom: 24px;
+background: linear-gradient(90deg, var(--primary), var(--primary-bright));
+-webkit-background-clip: text;
+background-clip: text;
+color: transparent;
 }
 .hero p {
-font-size: 1.2rem;
+font-size: 1.25rem;
 color: var(--gray);
-max-width: 700px;
+max-width: 720px;
 margin: 0 auto;
 }
 
-/* About */
 .about-content {
 display: grid;
 grid-template-columns: 1fr 1fr;
-gap: 50px;
+gap: 60px;
 align-items: center;
 }
 .image-wrapper {
@@ -122,9 +160,9 @@ justify-content: center;
 }
 .image-container {
 background: var(--dark);
-border-radius: 16px;
-padding: 24px;
-box-shadow: 0 8px 24px rgba(15, 23, 42, 0.2);
+border-radius: 20px;
+padding: 32px;
+box-shadow: 0 12px 30px rgba(0, 0, 0, 0.3);
 }
 .image-container img {
 max-width: 100%;
@@ -132,49 +170,63 @@ height: auto;
 display: block;
 }
 
-/* Services */
 .services-grid {
 display: grid;
 grid-template-columns: repeat(auto-fit, minmax(300px, 1fr));
-gap: 30px;
-margin-top: 40px;
+gap: 32px;
+margin-top: 50px;
 }
 .service-card {
 background: white;
-padding: 30px;
-border-radius: 16px;
-box-shadow: 0 5px 15px rgba(0,0,0,0.05);
-border-top: 4px solid var(--primary-light);
-transition: transform 0.3s;
+padding: 32px;
+border-radius: 18px;
+box-shadow: 0 6px 20px rgba(0,0,0,0.08);
+border-top: 3px solid var(--primary-bright);
+transition: all 0.4s cubic-bezier(0.34, 1.56, 0.64, 1);
+position: relative;
+overflow: hidden;
+}
+.service-card::before {
+content: '';
+position: absolute;
+top: 0;
+left: -100%;
+width: 100%;
+height: 100%;
+background: linear-gradient(90deg, transparent, var(--accent-glow), transparent);
+transition: left 0.8s;
 }
 .service-card:hover {
-transform: translateY(-5px);
+transform: translateY(-8px);
+box-shadow: 0 12px 28px rgba(59, 130, 246, 0.25);
+}
+.service-card:hover::before {
+left: 100%;
 }
 .service-card h3 {
 font-size: 1.4rem;
-margin: 15px 0;
+margin: 16px 0 12px;
 color: var(--primary);
 }
 .service-card div {
-font-size: 2.5rem;
+font-size: 2.8rem;
 }
 
-/* Testimonials - carrusel con puntitos */
 .testimonials {
 background: #f1f5f9;
 padding: 100px 0;
 text-align: center;
 }
 .testimonials .section-title h2 {
-font-size: 2.2rem;
+font-size: 2.3rem;
 color: var(--dark);
 margin-bottom: 50px;
 }
 .testimonial-carousel {
-max-width: 700px;
+max-width: 720px;
 margin: 0 auto;
 position: relative;
-height: 240px;
+height: 250px;
 }
 .testimonial-item {
 position: absolute;
@@ -182,7 +234,7 @@ top: 0;
 left: 0;
 width: 100%;
 opacity: 0;
-transition: opacity 0.5s ease-in-out;
+transition: opacity 0.5s cubic-bezier(0.34, 1.56, 0.64, 1);
 padding: 0 20px;
 }
 .testimonial-item.active {
@@ -190,69 +242,74 @@ opacity: 1;
 }
 .stars {
 color: #f59e0b;
-font-size: 1.4rem;
-margin-bottom: 16px;
-letter-spacing: 4px;
+font-size: 1.5rem;
+margin-bottom: 18px;
+letter-spacing: 5px;
 }
 .testimonial-text {
-font-size: 1.15rem;
+font-size: 1.18rem;
 font-style: italic;
 line-height: 1.6;
 color: var(--dark);
-margin-bottom: 18px;
+margin-bottom: 20px;
+text-transform: none;
 }
 .testimonial-author {
 font-weight: 600;
 color: var(--gray);
-font-size: 1rem;
+font-size: 1.05rem;
 }
 
-/* Indicadores (puntitos) */
 .carousel-indicators {
 display: flex;
 justify-content: center;
-gap: 8px;
-margin-top: 30px;
+gap: 10px;
+margin-top: 36px;
 }
 .indicator {
-width: 10px;
-height: 10px;
+width: 12px;
+height: 12px;
 border-radius: 50%;
 background: #cbd5e1;
 cursor: pointer;
-transition: background 0.3s;
+transition: all 0.3s cubic-bezier(0.34, 1.56, 0.64, 1);
 }
 .indicator.active {
 background: var(--primary-light);
+transform: scale(1.2);
 }
 
-/* Contact */
 .contact-layout {
 display: grid;
 grid-template-columns: 1fr 1fr;
-gap: 50px;
+gap: 56px;
 }
 .form-card {
 background: white;
-border-radius: 20px;
-padding: 45px;
-box-shadow: 0 12px 40px rgba(30, 64, 175, 0.08);
+border-radius: 22px;
+padding: 50px;
+box-shadow: 0 14px 45px rgba(30, 64, 175, 0.12);
 border: 1px solid var(--light-gray);
 }
 .form-card h2 {
-font-size: 1.6rem;
-margin-bottom: 24px;
+font-size: 1.7rem;
+margin-bottom: 22px;
 color: var(--primary);
+}
+.form-card p {
+margin-bottom: 28px;
+color: var(--gray);
+line-height: 1.6;
 }
 form {
 display: flex;
 flex-direction: column;
-gap: 22px;
+gap: 24px;
 }
 label {
 font-weight: 600;
 color: var(--dark);
-font-size: 0.95rem;
+font-size: 0.98rem;
 display: block;
 }
 .required {
@@ -260,60 +317,62 @@ color: var(--primary);
 }
 input, textarea, select {
 width: 100%;
-padding: 14px 16px;
+padding: 15px 18px;
 border: 1px solid var(--light-gray);
-border-radius: 12px;
+border-radius: 14px;
 font-size: 1rem;
 font-family: 'Inter', sans-serif;
-transition: all 0.25s ease;
+transition: all 0.3s cubic-bezier(0.34, 1.56, 0.64, 1);
 }
 input:focus, textarea:focus, select:focus {
 border-color: var(--primary-light);
 outline: none;
-box-shadow: 0 0 0 3px rgba(59, 130, 246, 0.12);
+box-shadow: 0 0 0 3px var(--accent-glow);
 }
 textarea {
-min-height: 150px;
+min-height: 160px;
 resize: vertical;
 }
-button {
-background: linear-gradient(90deg, var(--primary), var(--primary-light));
+.button-demo {
+background: linear-gradient(90deg, var(--primary), var(--primary-bright));
 color: white;
-padding: 15px 28px;
-font-size: 1.05rem;
-font-weight: 600;
+padding: 16px 30px;
+font-size: 1.1rem;
+font-weight: 700;
 border: none;
-border-radius: 12px;
+border-radius: 14px;
 cursor: pointer;
-transition: all 0.3s ease;
+transition: all 0.4s cubic-bezier(0.34, 1.56, 0.64, 1);
 font-family: 'Inter', sans-serif;
-letter-spacing: 0.3px;
-box-shadow: 0 4px 12px rgba(30, 64, 175, 0.25);
+letter-spacing: 0.5px;
+box-shadow: 0 6px 20px rgba(30, 64, 175, 0.3);
+width: 100%;
+position: relative;
+overflow: hidden;
 }
-button:hover {
-transform: translateY(-2px);
-box-shadow: 0 6px 16px rgba(30, 64, 175, 0.35);
-opacity: 0.98;
+.button-demo:hover {
+transform: translateY(-3px);
+box-shadow: 0 10px 28px rgba(30, 64, 175, 0.4);
 }
 .info-card h2 {
-font-size: 1.8rem;
-margin-bottom: 24px;
+font-size: 1.9rem;
+margin-bottom: 26px;
 color: var(--primary);
 }
 .info-card p {
-margin-bottom: 20px;
-font-size: 1.05rem;
+margin-bottom: 22px;
+font-size: 1.08rem;
 color: var(--gray);
 }
 .benefits-list {
 list-style: none;
-margin-top: 20px;
+margin-top: 24px;
 }
 .benefits-list li {
 display: flex;
 align-items: flex-start;
-margin-bottom: 16px;
-gap: 12px;
+margin-bottom: 18px;
+gap: 14px;
 font-weight: 500;
 color: var(--dark);
 }
@@ -321,51 +380,51 @@ color: var(--dark);
 content: '✓';
 background: var(--primary-light);
 color: white;
-width: 22px;
-height: 22px;
+width: 24px;
+height: 24px;
 border-radius: 50%;
 display: flex;
 align-items: center;
 justify-content: center;
-font-size: 0.85rem;
+font-size: 0.9rem;
 flex-shrink: 0;
 margin-top: 2px;
 }
 
-/* Footer */
 footer {
 text-align: center;
-padding: 40px 0;
+padding: 45px 0;
 color: var(--gray);
-font-size: 0.95rem;
+font-size: 0.98rem;
 background: var(--light);
 margin-top: 20px;
 }
 
-/* Responsive */
 @media (max-width: 900px) {
 .about-content,
 .contact-layout,
 .services-grid {
 grid-template-columns: 1fr;
 }
-.hero h1 { font-size: 2.2rem; }
-.logo {
-height: 52px;
-}
-.testimonial-carousel {
-height: 260px;
-}
+.hero h1 { font-size: 2.4rem; }
+.logo { height: 60px; }
+.testimonial-carousel { height: 280px; }
+.form-card { padding: 35px 25px; }
 }
 </style>
 </head>
 <body>
 
-<!-- Navegación fija -->
+<!-- Splash Screen de entrada -->
+<div id="splashScreen">
+  <img id="splashLogo" src="https://raw.githubusercontent.com/agenteia1/agenteia1.github.io/dcfec950d7e668318328716647cd93373dbb70d3/64a245fc-15e4-4cf0-9424-d62216497eba.svg" alt="Agentealta">
+</div>
+
+<!-- Navegación fija - logo más grande -->
 <nav id="mainNav">
 <div class="container nav-content">
 <div class="logo">
-  <img src="https://media.discordapp.net/attachments/1010651972568883291/1455590823755518146/Captura_de_pantalla_2025-12-30_155957-removebg-preview.png?ex=69554817&is=6953f697&hm=d04dcfc417ff20a47934a83b0c53156db7c6f90466bb6ab39e51eec9a46da434&=&format=webp&quality=lossless" alt="Agentealta" />
+  <img src="https://raw.githubusercontent.com/agenteia1/agenteia1.github.io/0fe1e790bdd7641b602fff690724ded5e8c432cb/5d781800-d7a2-4fae-aabd-402db9132d8a.svg" alt="Agentealta" />
 </div>
 <div class="nav-links">
 <a href="#about" class="active">Inicio</a>
@@ -378,8 +437,8 @@ height: 260px;
 <!-- Sección: Quiénes Somos -->
 <section id="about" class="hero">
 <div class="container">
-<h1>Quiénes somos</h1>
-<p>Expertos en automatización inteligente de comunicación para empresas que quieren ahorrar tiempo y mejorar su servicio al cliente.</p>
+<h1>Automatización inteligente con alma humana</h1>
+<p>Agentes de correo que piensan, responden y actúan como tú — sin perder tu esencia ni tu tiempo.</p>
 </div>
 </section>
 
@@ -388,13 +447,11 @@ height: 260px;
 <div class="about-content">
 <div>
 <h2>Construyendo el futuro del correo electrónico</h2>
-<p style="margin: 20px 0;">
-En <strong>Agentealta</strong>, creemos que la comunicación empresarial no debe depender de horas hombre ni de respuestas tardías.
-Por eso desarrollamos agentes de correo inteligentes que piensan, responden y actúan <em>como tú</em>.
+<p style="margin: 24px 0;">
+En <strong>Agentealta</strong>, creemos que la comunicación empresarial no debe depender de horas hombre ni de respuestas tardías. Por eso desarrollamos agentes de correo inteligentes que piensan, responden y actúan como tú.
 </p>
 <p>
-Fundada en 2023 por un equipo de ingenieros en IA y especialistas en experiencia del cliente,
-nuestra misión es liberar a las empresas de tareas repetitivas para que se enfoquen en lo que realmente importa: crecer.
+Fundada en 2023 por un equipo de ingenieros en IA y especialistas en experiencia del cliente, nuestra misión es liberar a las empresas de tareas repetitivas para que se enfoquen en lo que realmente importa: crecer.
 </p>
 </div>
 <div class="image-wrapper">
@@ -424,7 +481,7 @@ alt="Agentealta – IA + Experiencia Humana"
 <div class="service-card">
 <div>📅</div>
 <h3>Agendamiento inteligente</h3>
-<p>Coordina disponibilidad en tiempo real, evita dobles reservas y sincroniza con tu calendario (Google, Outlook, etc.).</p>
+<p>Coordina disponibilidad en tiempo real, evita dobles reservas y sincroniza con tu calendario.</p>
 </div>
 <div class="service-card">
 <div>❌</div>
@@ -449,37 +506,37 @@ alt="Agentealta – IA + Experiencia Humana"
 </div>
 </section>
 
-<!-- Sección: Testimonios con carrusel y puntitos -->
+<!-- Sección: Testimonios -->
 <section class="testimonials">
 <div class="container">
 <div class="section-title">
-<h2>Lo que dicen nuestros clientes</h2>
+<h2>Lo que dicen quienes ya usan Agentealta</h2>
 </div>
 <div class="testimonial-carousel" id="testimonialCarousel">
   <div class="testimonial-item active">
     <div class="stars">⭐⭐⭐⭐⭐</div>
-    <p class="testimonial-text">"YO ADQUIRÍ EL PLAN BÁSICO Y NO TENGO QUE PREOCUPARME MÁS POR MIS CORREOS, SUPER CONTENTO"</p>
-    <p class="testimonial-author">— Marta R., Consultora</p>
+    <p class="testimonial-text">adquirí el plan básico y ya no tengo que preocuparme más por mis correos. estoy super contento.</p>
+    <p class="testimonial-author">— Marta R. Consultora</p>
   </div>
   <div class="testimonial-item">
     <div class="stars">⭐⭐⭐⭐⭐</div>
-    <p class="testimonial-text">"Escojí el plan básico, pero como tengo bastantes clientes tuve que subirlo al Pro. ¡No podría estar más feliz!"</p>
-    <p class="testimonial-author">— Carlos M., Clínica Dental</p>
+    <p class="testimonial-text">escogí el plan básico, pero como tengo bastantes clientes tuve que subirlo al pro. no podría estar más feliz.</p>
+    <p class="testimonial-author">— Carlos M. Clínica Dental</p>
   </div>
   <div class="testimonial-item">
     <div class="stars">⭐⭐⭐⭐⭐</div>
-    <p class="testimonial-text">"Muy amables, todo muy rápido y fácil. En menos de un día ya tenía mi agente funcionando."</p>
-    <p class="testimonial-author">— Laura T., Academia de Idiomas</p>
+    <p class="testimonial-text">muy amables, todo muy rápido y fácil. en menos de un día ya tenía mi agente funcionando.</p>
+    <p class="testimonial-author">— Laura T. Academia de Idiomas</p>
   </div>
   <div class="testimonial-item">
     <div class="stars">⭐⭐⭐⭐⭐</div>
-    <p class="testimonial-text">"Antes perdía horas respondiendo correos repetitivos. Ahora mi agente lo hace todo. ¡Increíble!"</p>
-    <p class="testimonial-author">— David L., Asesor Legal</p>
+    <p class="testimonial-text">antes perdía horas respondiendo correos repetitivos. ahora mi agente lo hace todo. es increíble.</p>
+    <p class="testimonial-author">— David L. Asesor Legal</p>
   </div>
   <div class="testimonial-item">
     <div class="stars">⭐⭐⭐⭐⭐</div>
-    <p class="testimonial-text">"La mejor inversión para mi pequeño negocio. Mis clientes creen que estoy contestando personalmente."</p>
-    <p class="testimonial-author">— Sofía P., Spa Natural</p>
+    <p class="testimonial-text">la mejor inversión para mi pequeño negocio. mis clientes creen que estoy contestando personalmente.</p>
+    <p class="testimonial-author">— Sofía P. Spa Natural</p>
   </div>
 </div>
 <div class="carousel-indicators" id="carouselIndicators">
@@ -496,12 +553,13 @@ alt="Agentealta – IA + Experiencia Humana"
 <section id="contact" style="background: linear-gradient(135deg, #f8fafc 0%, #f0f9ff 100%);">
 <div class="container">
 <div style="text-align: center; margin-bottom: 50px;">
-<h2>Contáctanos</h2>
-<p>Envíanos los datos de tu empresa y crearemos un agente de correo inteligente a tu medida, listo para trabajar 24/7.</p>
+<h2>Prueba Agentealta sin compromiso</h2>
+<p>Programa una demostración gratuita y personalizada. Verás en vivo cómo tu agente responde, agenda y gestiona como tú.</p>
 </div>
 <div class="contact-layout">
 <div class="form-card">
-<h2>Envía tu información</h2>
+<h2>Solicita tu demostración gratuita</h2>
+<p>En menos de 24 horas te contactaremos para coordinar una llamada y crear un agente de prueba con tus reglas.</p>
 <form id="contactForm" action="https://formspree.io/f/mwvkjrdo" method="POST">
 <div>
 <label for="companyName">Nombre de la empresa <span class="required">*</span></label>
@@ -533,27 +591,18 @@ alt="Agentealta – IA + Experiencia Humana"
 <option value="otros">Otros</option>
 </select>
 </div>
-<div>
-<label for="message">¿Qué necesitas automatizar? <span class="required">*</span></label>
-<textarea
-id="message"
-name="mensaje"
-placeholder="Ej: Quiero que mi agente responda a consultas de disponibilidad, agende citas, cancele reservas y envíe recordatorios."
-required
-></textarea>
-</div>
-<button type="submit">Enviar solicitud →</button>
+<button type="submit" class="button-demo">Solicitar demostración gratuita →</button>
 </form>
 </div>
 <div class="info-card">
-<h2>¿Por qué contactarnos?</h2>
-<p>En Agentealta, no vendemos bots genéricos. Creamos agentes de correo <strong>totalmente personalizados</strong> que entienden tu negocio y actúan como tú.</p>
+<h2>¿Por qué probar Agentealta?</h2>
+<p>No vendemos bots genéricos. Creamos agentes de correo <strong>totalmente personalizados</strong> que entienden tu negocio y actúan como tú.</p>
 <ul class="benefits-list">
-<li>Respuesta en menos de 24 horas</li>
-<li>Configuración sin tecnicismos</li>
-<li>Integración con tu correo actual (Gmail, Outlook, etc.)</li>
-<li>Soporte humano durante la implementación</li>
-<li>Sin contrato de permanencia</li>
+<li>Demostración gratuita y sin compromiso</li>
+<li>Configuración en menos de 24 horas</li>
+<li>Integración con Gmail, Outlook o tu dominio</li>
+<li>Soporte humano durante toda la implementación</li>
+<li>Cancela en cualquier momento</li>
 </ul>
 <p>¿Tienes dudas? Explícanos tu caso y te diremos si somos la solución ideal para ti.</p>
 </div>
@@ -567,76 +616,88 @@ required
 </footer>
 
 <script>
-// Carrusel automático de reseñas con indicadores
+// Splash screen de entrada
+document.addEventListener('DOMContentLoaded', function() {
+  const splash = document.getElementById('splashScreen');
+  
+  // Mostrar contenido después de 3 segundos
+  setTimeout(() => {
+    splash.classList.add('hidden');
+  }, 3000);
+});
+
+// Carrusel de reseñas
+let autoSlideInterval;
 document.addEventListener('DOMContentLoaded', () => {
-  const items = document.querySelectorAll('.testimonial-item');
-  const indicators = document.querySelectorAll('.indicator');
-  let currentIndex = 0;
-  let autoSlideInterval;
+  // Esperar a que termine el splash
+  setTimeout(() => {
+    const items = document.querySelectorAll('.testimonial-item');
+    const indicators = document.querySelectorAll('.indicator');
+    let currentIndex = 0;
 
-  function updateCarousel(index) {
-    // Quita clases activas
-    items.forEach(item => item.classList.remove('active'));
-    indicators.forEach(ind => ind.classList.remove('active'));
-    
-    // Activa el nuevo
-    items[index].classList.add('active');
-    indicators[index].classList.add('active');
-    currentIndex = index;
-  }
+    function updateCarousel(index) {
+      items.forEach(item => item.classList.remove('active'));
+      indicators.forEach(ind => ind.classList.remove('active'));
+      items[index].classList.add('active');
+      indicators[index].classList.add('active');
+      currentIndex = index;
+    }
 
-  function showNext() {
-    const nextIndex = (currentIndex + 1) % items.length;
-    updateCarousel(nextIndex);
-  }
+    function showNext() {
+      const nextIndex = (currentIndex + 1) % items.length;
+      updateCarousel(nextIndex);
+    }
 
-  // Iniciar carrusel automático
-  autoSlideInterval = setInterval(showNext, 5000);
+    autoSlideInterval = setInterval(showNext, 5000);
 
-  // Clic en indicadores
-  indicators.forEach(indicator => {
-    indicator.addEventListener('click', () => {
-      const index = parseInt(indicator.getAttribute('data-index'));
-      updateCarousel(index);
-      // Reiniciar temporizador
-      clearInterval(autoSlideInterval);
-      autoSlideInterval = setInterval(showNext, 5000);
+    indicators.forEach(indicator => {
+      indicator.addEventListener('click', () => {
+        const index = parseInt(indicator.getAttribute('data-index'));
+        updateCarousel(index);
+        clearInterval(autoSlideInterval);
+        autoSlideInterval = setInterval(showNext, 5000);
+      });
     });
-  });
+  }, 3200); // Iniciar 200ms después del splash
 });
 
 // Navegación con scroll suave
-const navLinks = document.querySelectorAll('.nav-links a');
-const sections = document.querySelectorAll('section[id]');
+window.addEventListener('load', () => {
+  const navLinks = document.querySelectorAll('.nav-links a');
+  const sections = document.querySelectorAll('section[id]');
 
-window.addEventListener('scroll', () => {
-  let current = '';
-  sections.forEach(section => {
-    const sectionTop = section.offsetTop - 120;
-    const sectionHeight = section.clientHeight;
-    if (pageYOffset >= sectionTop && pageYOffset < sectionTop + sectionHeight) {
-      current = section.getAttribute('id');
-    }
-  });
+  function updateActiveLink() {
+    let current = '';
+    sections.forEach(section => {
+      const sectionTop = section.offsetTop - 120;
+      const sectionHeight = section.clientHeight;
+      if (window.pageYOffset >= sectionTop && window.pageYOffset < sectionTop + sectionHeight) {
+        current = section.getAttribute('id');
+      }
+    });
 
-  navLinks.forEach(link => {
-    link.classList.remove('active');
-    if (link.getAttribute('href') === `#${current}`) {
-      link.classList.add('active');
-    }
-  });
-});
+    navLinks.forEach(link => {
+      link.classList.remove('active');
+      if (link.getAttribute('href') === `#${current}`) {
+        link.classList.add('active');
+      }
+    });
+  }
 
-document.querySelectorAll('a[href^="#"]').forEach(anchor => {
-  anchor.addEventListener('click', function(e) {
-    e.preventDefault();
-    const target = document.querySelector(this.getAttribute('href'));
-    if (target) {
-      window.scrollTo({
-        top: target.offsetTop - 80,
-        behavior: 'smooth'
-      });
-    }
+  window.addEventListener('scroll', updateActiveLink);
+  updateActiveLink();
+
+  document.querySelectorAll('a[href^="#"]').forEach(anchor => {
+    anchor.addEventListener('click', function(e) {
+      e.preventDefault();
+      const target = document.querySelector(this.getAttribute('href'));
+      if (target) {
+        window.scrollTo({
+          top: target.offsetTop - 80,
+          behavior: 'smooth'
+        });
+      }
+    });
   });
 });
 </script>
