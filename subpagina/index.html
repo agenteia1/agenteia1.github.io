@@ -354,6 +354,31 @@
       margin-bottom: 20px;
     }
 
+    /* === Paso 4 centrado en toda la página === */
+    .step-4-centered {
+      background: #1e293b;
+      border-radius: 20px;
+      padding: 30px;
+      opacity: 0;
+      transform: translateY(30px);
+      transition: opacity 0.6s ease, transform 0.6s ease;
+      margin: 80px auto 0;
+      max-width: 300px;
+      text-align: center;
+    }
+    .step-4-centered h3 {
+      font-size: 1.3rem;
+      margin-bottom: 12px;
+      color: var(--white);
+    }
+    .step-4-centered p {
+      color: #cbd5e1;
+      font-size: 1rem;
+    }
+    .step-4-centered .step-number {
+      margin: 0 auto 20px;
+    }
+
     /* === Testimonials === */
     .testimonials {
       background: #0f1923;
@@ -536,6 +561,10 @@
       .hero h1 { font-size: 2rem; }
       .form-card { padding: 30px 20px; }
       .testimonial-carousel { height: 260px; }
+      .step-4-centered {
+        margin: 80px auto 0;
+        max-width: 100%;
+      }
     }
   </style>
 </head>
@@ -629,6 +658,7 @@
       <h2>Implementación en 4 pasos</h2>
       <p>Proceso simple y rápido para activar tu agente IA</p>
     </div>
+    <!-- Pasos 1, 2, 3 en grid -->
     <div class="implementation-steps">
       <div class="step-card" style="transition-delay: 0s;">
         <div class="step-number">1</div>
@@ -645,12 +675,12 @@
         <h3>Integramos Con Tus Sistemas</h3>
         <p>Conectamos con tu CRM, calendario y herramientas existentes.</p>
       </div>
-      <!-- Paso 4 centrado -->
-      <div class="step-card" style="transition-delay: 0.3s; margin: 0 auto; max-width: 300px;">
-        <div class="step-number">4</div>
-        <h3>Optimizamos y Escalamos Contigo</h3>
-        <p>Mejoramos continuamente el rendimiento y escalamos según tus necesidades.</p>
-      </div>
+    </div>
+    <!-- Paso 4 centrado en toda la página -->
+    <div class="step-4-centered" style="transition-delay: 0.3s;">
+      <div class="step-number">4</div>
+      <h3>Optimizamos y Escalamos Contigo</h3>
+      <p>Mejoramos continuamente el rendimiento y escalamos según tus necesidades.</p>
     </div>
   </div>
 </section>
@@ -820,6 +850,12 @@
           card.style.transform = 'translateY(0)';
           card.style.transition = 'opacity 0.6s ease, transform 0.6s ease';
         });
+        const step4 = document.querySelector('.step-4-centered');
+        if (step4) {
+          step4.style.opacity = '1';
+          step4.style.transform = 'translateY(0)';
+          step4.style.transition = 'opacity 0.6s ease, transform 0.6s ease';
+        }
       }, 1200);
 
     }, 3000);
