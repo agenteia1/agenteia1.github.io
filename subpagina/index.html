@@ -73,7 +73,7 @@
     /* === Navegación dinámica === */
     header {
       background: var(--dark);
-      padding: 24px 0; /* Grande al inicio */
+      padding: 24px 0;
       position: fixed;
       top: 0;
       width: 100%;
@@ -82,7 +82,7 @@
       transition: all 0.3s cubic-bezier(0.34, 1.56, 0.64, 1);
     }
     header.scrolled {
-      padding: 16px 0; /* Más compacta al hacer scroll */
+      padding: 16px 0;
       box-shadow: 0 4px 20px rgba(0,0,0,0.3);
     }
     .header-content {
@@ -91,11 +91,11 @@
       align-items: center;
     }
     .logo {
-      height: 56px; /* Grande al inicio */
+      height: 56px;
       transition: height 0.3s cubic-bezier(0.34, 1.56, 0.64, 1);
     }
     header.scrolled .logo {
-      height: 40px; /* Más pequeño al hacer scroll */
+      height: 40px;
     }
     .logo img {
       height: 100%;
@@ -288,24 +288,34 @@
       display: block;
     }
 
-    /* === Services === */
+    /* === Services - formato solicitado === */
+    #services {
+      background: #0f1923;
+    }
     .services-grid {
       display: grid;
       grid-template-columns: repeat(auto-fit, minmax(280px, 1fr));
-      gap: 32px;
+      gap: 40px;
       margin-top: 50px;
     }
     .service-card {
-      background: #1e293b;
-      padding: 36px 28px;
-      border-radius: 20px;
-      border-top: 3px solid var(--accent);
       text-align: center;
-      transition: transform 0.3s ease, box-shadow 0.3s ease;
+      opacity: 0;
+      transform: translateY(30px);
     }
-    .service-card:hover {
-      transform: translateY(-6px);
-      box-shadow: 0 10px 25px rgba(0, 212, 159, 0.15);
+    .service-card div {
+      font-size: 2.8rem;
+      color: var(--accent);
+      margin-bottom: 16px;
+    }
+    .service-card h3 {
+      font-size: 1.3rem;
+      margin-bottom: 12px;
+      color: var(--white);
+    }
+    .service-card p {
+      color: #cbd5e1;
+      font-size: 1rem;
     }
 
     /* === Testimonials === */
@@ -548,40 +558,40 @@
   </div>
 </section>
 
-<!-- Services -->
-<section id="services" class="about-section">
+<!-- Sección: Qué Hacemos (formato solicitado) -->
+<section id="services">
   <div class="container">
     <div style="text-align: center; margin-bottom: 50px;">
       <h2>Qué hacemos</h2>
-      <p style="color: #cbd5e1;">Automatizamos la gestión de tu correo con agentes inteligentes personalizados.</p>
+      <p>Automatizamos la gestión de tu correo con agentes inteligentes personalizados.</p>
     </div>
     <div class="services-grid">
-      <div class="service-card">
+      <div class="service-card" style="transition-delay: 0s;">
         <div>📧</div>
         <h3>Respuestas personalizadas</h3>
         <p>Responde como tú, con tu tono y estilo.</p>
       </div>
-      <div class="service-card">
+      <div class="service-card" style="transition-delay: 0.1s;">
         <div>📅</div>
         <h3>Agendamiento inteligente</h3>
         <p>Coordina disponibilidad en tiempo real.</p>
       </div>
-      <div class="service-card">
+      <div class="service-card" style="transition-delay: 0.2s;">
         <div>❌</div>
         <h3>Gestión de cancelaciones</h3>
         <p>Cancela o reprograma según tus reglas.</p>
       </div>
-      <div class="service-card">
+      <div class="service-card" style="transition-delay: 0.3s;">
         <div>🔍</div>
         <h3>Búsqueda de disponibilidad</h3>
         <p>Consulta tu agenda y responde al instante.</p>
       </div>
-      <div class="service-card">
+      <div class="service-card" style="transition-delay: 0.4s;">
         <div>🛡️</div>
         <h3>Seguridad y privacidad</h3>
         <p>Cifrado de extremo a extremo. GDPR compliant.</p>
       </div>
-      <div class="service-card">
+      <div class="service-card" style="transition-delay: 0.5s;">
         <div>🧠</div>
         <h3>Aprendizaje continuo</h3>
         <p>Mejora con cada interacción.</p>
@@ -727,6 +737,16 @@
           imageContainer.classList.add('show');
         }, 800);
       }
+
+      // Activar animación de servicios
+      setTimeout(() => {
+        const serviceCards = document.querySelectorAll('.service-card');
+        serviceCards.forEach(card => {
+          card.style.opacity = '1';
+          card.style.transform = 'translateY(0)';
+          card.style.transition = 'opacity 0.6s ease, transform 0.6s ease';
+        });
+      }, 1000);
 
     }, 3000);
   }
